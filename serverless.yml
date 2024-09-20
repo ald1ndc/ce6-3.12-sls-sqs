@@ -35,7 +35,7 @@ resources:
       Properties:
         QueueName: AldintestQueue 
 
-Outputs:
-  SQSQueueUrl:
-    Value:
-      Ref: MessageQueue
+#Outputs:
+#  SQSQueueUrl:
+#    Value:
+#      Ref: MessageQueue
