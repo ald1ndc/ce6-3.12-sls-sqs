@@ -2,15 +2,40 @@
 org: aldin
 # "service" is the name of this project. This will also be added to your AWS resource names.
 service: sqs312
+frameworkVersion: "3"
 
 provider:
   name: aws
   runtime: nodejs20.x
+  region: ap-southeast-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - sqs:SendMessage
+      Resource:
+        - Fn::GetAtt:
+            - MessageQueue
+            - Arn
+
 
 functions:
-  hello:
-    handler: handler.hello
+  sendMessage:
+    handler: handler.sendMessage
+    environment:
+      SQS_QUEUE_URL:
+        Ref: MessageQueue
     events:
       - httpApi:
           path: /
-          method: get
+          method: post
+resources:
+  Resources:
+    MessageQueue:
+      Type: AWS::SQS::Queue   #change3 removed double quote
+      Properties:
+        QueueName: AldintestQueue 
+
+Outputs:
+  SQSQueueUrl:
+    Value:
+      Ref: MessageQueue
